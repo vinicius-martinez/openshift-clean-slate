@@ -2,6 +2,7 @@
 
 if [ -f /run/secrets/kubernetes.io/serviceaccount/token ]; then
 	TOKEN=`cat /run/secrets/kubernetes.io/serviceaccount/token`
+	PROJECT=`cat cat /run/secrets/kubernetes.io/serviceaccount/namespace`
 	CA=/run/secrets/kubernetes.io/serviceaccount/ca.crt
 else
 	echo "No token found. Are you running on OpenShift?"
@@ -19,7 +20,7 @@ if [ -n "$DEPLOYMENT_CONFIGS" ]; then
 	do
 		echo "--"
 		echo "Cleaning the slate of $dc"
-		oc rollout latest dc/$dc
+		oc rollout latest dc/$dc -n $PROJECT
 		echo "Done"
 	done
 else

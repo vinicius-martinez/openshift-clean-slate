@@ -3,9 +3,9 @@ kind: CronJob
 metadata:
   name: clean-slate
   annotations:
-    alpha.image.policy.openshift.io/resolve-names: *
+    alpha.image.policy.openshift.io/resolve-names: '*'
 spec:
-  schedule: "*/1 * * * *"  
+  schedule: "*/2 * * * *"  
   jobTemplate:             
     spec:
       template:
@@ -15,8 +15,8 @@ spec:
         spec:
           containers:
           - name: clean-slate
-            image: 172.30.1.1:5000/myproject/openshift-clean-slate
+            image: openshift-clean-slate:latest
             env:
             - name: DEPLOYMENT_CONFIGS
-              value: broker-amq,spring-boot-amq
+              value: orders-sender,orders-receiver
           restartPolicy: OnFailure 
