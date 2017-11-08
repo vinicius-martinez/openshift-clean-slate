@@ -2,7 +2,7 @@
 
 if [ -f /run/secrets/kubernetes.io/serviceaccount/token ]; then
 	TOKEN=`cat /run/secrets/kubernetes.io/serviceaccount/token`
-	PROJECT=`cat cat /run/secrets/kubernetes.io/serviceaccount/namespace`
+	PROJECT=`cat /run/secrets/kubernetes.io/serviceaccount/namespace`
 	CA=/run/secrets/kubernetes.io/serviceaccount/ca.crt
 else
 	echo "No token found. Are you running on OpenShift?"
