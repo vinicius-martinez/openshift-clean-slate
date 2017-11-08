@@ -3,7 +3,7 @@ LABEL io.k8s.description="A container for cleaning the slate of target Deploymen
 
 ADD scripts/clean-slate.sh /opt/app/scripts/
 
-RUN microdnf --enablerepo=rhel-7-server-ose-3.6-rpms \
+RUN microdnf --enablerepo=rhel-7-server-rpms --enablerepo=rhel-7-server-ose-3.6-rpms \
 			install atomic-openshift-clients --nodocs ;\
 			microdnf clean all
 			
