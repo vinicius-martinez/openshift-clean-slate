@@ -7,9 +7,9 @@ else
 fi
 
 # Make sure we're logged in
-if [ -n "$TOKEN" ]; then
+if [ -n "$TOKEN" g]; then
 	echo "Authenticating with token"
-	oc login --token=$TOKEN
+	oc login $KUBERNETES_SERVICE_HOST --token=$TOKEN --certificate-authority=/run/secrets/kubernetes.io/serviceaccount/ca.crt
 fi
 
 # Iterate through DCs, and execute a rollout on them
