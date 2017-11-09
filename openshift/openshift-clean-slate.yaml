@@ -80,7 +80,7 @@ objects:
               - name: DEPLOYMENT_CONFIGS
                 valueFrom:
                   configMapKeyRef:
-                    name: clean-slate-config
+                    name: ${JOB_NAME}-config
                     key: deployment.configs              
             restartPolicy: OnFailure 
 
