@@ -15,6 +15,10 @@ A templated Job in OpenShift which redeploys Pods based on a specific Cron Sched
 
 Chaos Monkey. This is predictable and deliberate. Chaos Monkey is neither of those things. It might inadvertently test some of the same things, but it is not a replacement and should not be treated as such.
 
+### I Could Totally Just Use Jenkins For This
+
+Yes. You could. And feel free to, if you want. But that's not what I'd traditionally call a 'lightweight' solution to an otherwise simple problem. This is simple, repeatable, easy to scale, and uses native OpenShift functionality rather than relying on a 3rd party orchestrator.
+
 ### Useage
 
 **NOTE - This version can only be used with OpenShift 3.6 or later. Earlier versions do not correctly support referencing ImageStreams from a CronJob. The Fully Qualified Name of the Image must be used instead**
