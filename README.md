@@ -6,7 +6,7 @@ A templated Job in OpenShift which redeploys Pods based on a specific Cron Sched
 
 - Whether containers in a Pod is following an anti-pattern by storing critical process state in ephemeral storage (Image Immutability Principle)
 - Whether a container in a Pod is able to gracefully handle enforced shutdown / restart (Lifecycle Conformance Principle)
-- Whether a Pod is a *snowflake* or not. (Process Disposability Principle)
+- Whether a Pod is a *snowflake* or not.
 - Whether Services that rely on this Pod are able to handle its absence gracefully (Self Containment Principle)
 - Whether or not enough replicas of this Pod are maintained to allow service continuity during the redeployment.
 
