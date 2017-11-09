@@ -1,0 +1,136 @@
+apiVersion: v1
+kind: Template
+metadata:
+  creationTimestamp: null
+  name: openshift-clean-slate
+parameters:
+- name: DEPLOYMENT_CONFIGS
+  description: A comma-seperated list of Deployments to wipe clean on a scheduled basis
+  displayName: Deployment Configs
+  required: true
+- name: CRON_SCHEDULE
+  description: Standard Cron schedule against which to execute the jon
+  displayName: Cron Schedule
+  value: "*/2 * * * *"
+  required: true  
+objects:
+- apiVersion: v1
+  kind: BuildConfig
+  metadata:
+    labels:
+      job: openshift-clean-slate
+    name: openshift-clean-slate
+  spec:
+    failedBuildsHistoryLimit: 5
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: openshift-clean-slate:latest
+    postCommit: {}
+    resources: {}
+    runPolicy: Serial
+    source:
+      git:
+        uri: https://github.com/benemon/openshift-clean-slate
+      type: Git
+    strategy:
+      dockerStrategy:
+        from:
+          kind: ImageStreamTag
+          name: rhel7-atomic:latest
+      type: Docker
+    successfulBuildsHistoryLimit: 5
+    triggers:
+    - github:
+        secret: gnrXCOXj2w89axGgVp2E
+      type: GitHub
+    - generic:
+        secret: i75TvebEAXHdwBFyRvYx
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      job: openshift-clean-slate
+    name: openshift-clean-slate
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: 172.30.1.1:5000/dev/openshift-clean-slate:latest
+      generation: null
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+  status:
+    dockerImageRepository: ""
+    
+- apiVersion: batch/v2alpha1
+  kind: CronJob
+  metadata:
+    name: clean-slate
+    labels:
+      job: openshift-clean-slate
+    annotations:
+      alpha.image.policy.openshift.io/resolve-names: '*'
+  spec:
+    schedule: ${CRON_SCHEDULE}
+    jobTemplate:             
+      spec:
+        template:
+          metadata:
+            labels:          
+              parent: "cronjobslate"
+          spec:
+            containers:
+            - name: clean-slate
+              image: openshift-clean-slate:latest
+              env:
+              - name: DEPLOYMENT_CONFIGS
+                valueFrom:
+                  configMapKeyRef:
+                    name: clean-slate-config
+                    key: deployment.configs              
+            restartPolicy: OnFailure 
+    
+
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      job: openshift-clean-slate
+    name: rhel7-atomic
+  spec:
+    lookupPolicy:
+      local: false
+    tags:
+    - annotations:
+        openshift.io/imported-from: registry.access.redhat.com/rhel7-atomic
+      from:
+        kind: DockerImage
+        name: 172.30.1.1:5000/dev/rhel7-atomic:latest
+      generation: 2
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: Source
+    
+- apiVersion: v1
+  data:
+    deployment.configs: ${DEPLOYMENT_CONFIGS}
+  kind: ConfigMap
+  metadata:
+    labels:
+      job: openshift-clean-slate
+    name: clean-slate-config
