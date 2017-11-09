@@ -59,7 +59,7 @@ objects:
 - apiVersion: batch/v2alpha1
   kind: CronJob
   metadata:
-    name: clean-slate
+    name: ${JOB_NAME}
     labels:
       job: ${JOB_NAME}
     annotations:
@@ -83,7 +83,6 @@ objects:
                     name: clean-slate-config
                     key: deployment.configs              
             restartPolicy: OnFailure 
-    
 
 - apiVersion: v1
   kind: ImageStream
