@@ -3,7 +3,15 @@ kind: Template
 metadata:
   creationTimestamp: null
   name: openshift-clean-slate
+  
+message: A CronJob service has been created in your project. Its current schedule is ${CRON_SCHEDULE} and it will operate against the following DeploymentConfigs - ${DEPLOYMENT_CONFIGS}
+  
 parameters:
+- name: JOB_NAME
+  description: Unique identifier for this particular job
+  displayName: Job Name
+  value: clean-slate
+  required: true  
 - name: DEPLOYMENT_CONFIGS
   description: A comma-seperated list of Deployments to wipe clean on a scheduled basis
   displayName: Deployment Configs
@@ -13,12 +21,14 @@ parameters:
   displayName: Cron Schedule
   value: "*/2 * * * *"
   required: true  
+  
 objects:
 - apiVersion: v1
   kind: BuildConfig
   metadata:
     labels:
-      job: openshift-clean-slate
+      build: openshift-clean-slate
+      job: ${JOB_NAME}
     name: openshift-clean-slate
   spec:
     failedBuildsHistoryLimit: 5
@@ -42,46 +52,16 @@ objects:
       type: Docker
     successfulBuildsHistoryLimit: 5
     triggers:
-    - github:
-        secret: gnrXCOXj2w89axGgVp2E
-      type: GitHub
-    - generic:
-        secret: i75TvebEAXHdwBFyRvYx
-      type: Generic
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
-  status:
-    lastVersion: 0
-
-- apiVersion: v1
-  kind: ImageStream
-  metadata:
-    labels:
-      job: openshift-clean-slate
-    name: openshift-clean-slate
-  spec:
-    lookupPolicy:
-      local: false
-    tags:
-    - annotations: null
-      from:
-        kind: DockerImage
-        name: 172.30.1.1:5000/dev/openshift-clean-slate:latest
-      generation: null
-      importPolicy: {}
-      name: latest
-      referencePolicy:
-        type: ""
-  status:
-    dockerImageRepository: ""
     
 - apiVersion: batch/v2alpha1
   kind: CronJob
   metadata:
     name: clean-slate
     labels:
-      job: openshift-clean-slate
+      job: ${JOB_NAME}
     annotations:
       alpha.image.policy.openshift.io/resolve-names: '*'
   spec:
@@ -91,10 +71,10 @@ objects:
         template:
           metadata:
             labels:          
-              parent: "cronjobslate"
+              parent: ${JOB_NAME}-parent
           spec:
             containers:
-            - name: clean-slate
+            - name: ${JOB_NAME}
               image: openshift-clean-slate:latest
               env:
               - name: DEPLOYMENT_CONFIGS
@@ -109,7 +89,28 @@ objects:
   kind: ImageStream
   metadata:
     labels:
-      job: openshift-clean-slate
+      build: openshift-clean-slate
+      job: ${JOB_NAME}
+    name: openshift-clean-slate
+  spec:
+    lookupPolicy:
+      local: true
+    tags:
+    - annotations: null
+      from:
+        kind: DockerImage
+        name: openshift-clean-slate:latest
+      importPolicy: {}
+      name: latest
+      referencePolicy:
+        type: ""
+    
+- apiVersion: v1
+  kind: ImageStream
+  metadata:
+    labels:
+      build: openshift-clean-slate
+      job: ${JOB_NAME}
     name: rhel7-atomic
   spec:
     lookupPolicy:
@@ -119,8 +120,7 @@ objects:
         openshift.io/imported-from: registry.access.redhat.com/rhel7-atomic
       from:
         kind: DockerImage
-        name: 172.30.1.1:5000/dev/rhel7-atomic:latest
-      generation: 2
+        name: registry.access.redhat.com/rhel7-atomic:latest
       importPolicy: {}
       name: latest
       referencePolicy:
@@ -132,5 +132,5 @@ objects:
   kind: ConfigMap
   metadata:
     labels:
-      job: openshift-clean-slate
-    name: clean-slate-config
+      job: ${JOB_NAME}
+    name: ${JOB_NAME}-config
