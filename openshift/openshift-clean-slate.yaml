@@ -17,7 +17,7 @@ parameters:
   displayName: Deployment Configs
   required: true
 - name: CRON_SCHEDULE
-  description: Standard Cron schedule against which to execute the jon
+  description: Standard Cron schedule against which to execute the job
   displayName: Cron Schedule
   value: "*/2 * * * *"
   required: true  
