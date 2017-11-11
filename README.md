@@ -2,7 +2,7 @@
 
 ### What Is It?
 
-A templated Job in OpenShift which redeploys Pods based on a specific Cron Schedule. This 'cleaning of the slate' resets the Pod state to is initial state and serves to highlight several things:
+A templated Job in OpenShift which redeploys Pods based on a specific Cron Schedule. This 'wiping of the slate' resets the Pod state to is initial state and serves to highlight several things:
 
 - Whether containers in a Pod is following an anti-pattern by storing critical process state in ephemeral storage (Image Immutability Principle)
 - Whether a container in a Pod is able to gracefully handle enforced shutdown / restart (Lifecycle Conformance Principle)
