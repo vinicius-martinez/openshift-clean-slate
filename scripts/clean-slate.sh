@@ -19,7 +19,7 @@ if [ -n "$DEPLOYMENT_CONFIGS" ]; then
 	for dc in $(echo $DEPLOYMENT_CONFIGS | sed "s/,/ /g")
 	do
 		echo "--"
-		echo "Cleaning the slate of $dc"
+		echo "Wiping the slate of $dc"
 		oc rollout latest dc/$dc -n $PROJECT
 		echo "Done"
 	done
