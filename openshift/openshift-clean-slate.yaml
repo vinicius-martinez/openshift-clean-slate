@@ -20,6 +20,11 @@ parameters:
   description: Standard Cron schedule against which to execute the job
   displayName: Cron Schedule
   value: "*/2 * * * *"
+  required: true
+ - name: REPLICA_COUNT
+  description: Number os Replicas that should be created after CronJob Execution
+  displayName: Replica Count
+  value: "*/5 * * * *"
   required: true  
   
 objects:
