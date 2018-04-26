@@ -21,6 +21,10 @@ parameters:
   displayName: Cron Schedule
   value: "*/2 * * * *"
   required: true
+ - name: REPLICA_COUNT
+  description: Number os replicas a given DeploymentConfig should match
+  displayName: Number of Replicas
+  required: true
   
 objects:
 - apiVersion: v1
