@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Template
 metadata:
   creationTimestamp: null
-  name: openshift-clean-slate
+  name: openshift-cron-based-scaling
   
 message: A CronJob service has been created in your project. Its current schedule is ${CRON_SCHEDULE} and it will operate against the following DeploymentConfigs - ${DEPLOYMENT_CONFIGS}
   
