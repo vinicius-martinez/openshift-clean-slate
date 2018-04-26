@@ -46,7 +46,7 @@ objects:
     runPolicy: Serial
     source:
       git:
-        uri: https://github.com/benemon/openshift-clean-slate
+        uri: https://github.com/vinicius-martinez/openshift-clean-slate
       type: Git
     strategy:
       dockerStrategy:
