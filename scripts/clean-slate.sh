@@ -15,7 +15,7 @@ if [ -n "$TOKEN" ]; then
 fi
 
 # Iterate through DCs, and execute a rollout on them
-if [ -n "$DEPLOYMENT_CONFIGS" ] -a [ -n "$REPLICA_COUNT" ]; then
+if [ -n "$DEPLOYMENT_CONFIGS" -a  -n "$REPLICA_COUNT" ]; then
 	echo "--"
 	echo "Scaling Deployment Config $DEPLOYMENT_CONFIGS with the following replica: $REPLICA_COUNT"
 	oc scale --replicas=$REPLICA_COUNT dc $DEPLOYMENT_CONFIGS -n $PROJECT
