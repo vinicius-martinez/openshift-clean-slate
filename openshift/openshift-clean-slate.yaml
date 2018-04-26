@@ -10,16 +10,16 @@ parameters:
 - name: JOB_NAME
   description: Unique identifier for this particular job
   displayName: Job Name
-  value: clean-slate
+  value: cron-based-scaling
   required: true  
 - name: DEPLOYMENT_CONFIGS
-  description: A comma-seperated list of Deployments to wipe clean on a scheduled basis
-  displayName: Deployment Configs
+  description: DeploymentConfig name of the resource that will be scaled
+  displayName: Deployment Config
   required: true
 - name: CRON_SCHEDULE
   description: Standard Cron schedule against which to execute the job
   displayName: Cron Schedule
-  value: "*/2 * * * *"
+  value: "*/5 * * * *"
   required: true
  - name: REPLICA_COUNT
   description: Number os replicas a given DeploymentConfig should match
