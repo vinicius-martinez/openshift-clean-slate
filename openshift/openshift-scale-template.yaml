@@ -21,7 +21,7 @@ parameters:
   displayName: Cron Schedule
   value: "*/5 * * * *"
   required: true
- - name: REPLICA_COUNT
+- name: REPLICA_COUNT
   description: Number os replicas a given DeploymentConfig should match
   displayName: Number of Replicas
   required: true
@@ -31,16 +31,16 @@ objects:
   kind: BuildConfig
   metadata:
     labels:
-      build: openshift-clean-slate
+      build: openshift-cron-based-scaling
       job: ${JOB_NAME}
-    name: openshift-clean-slate
+    name: openshift-cron-based-scaling
   spec:
     failedBuildsHistoryLimit: 5
     nodeSelector: null
     output:
       to:
         kind: ImageStreamTag
-        name: openshift-clean-slate:latest
+        name: openshift-cron-based-scaling:latest
     postCommit: {}
     resources: {}
     runPolicy: Serial
@@ -79,7 +79,7 @@ objects:
           spec:
             containers:
             - name: ${JOB_NAME}
-              image: openshift-clean-slate:latest
+              image: openshift-cron-based-scaling:latest
               env:
               - name: DEPLOYMENT_CONFIGS
                 valueFrom:
@@ -92,9 +92,9 @@ objects:
   kind: ImageStream
   metadata:
     labels:
-      build: openshift-clean-slate
+      build: openshift-cron-based-scaling
       job: ${JOB_NAME}
-    name: openshift-clean-slate
+    name: openshift-cron-based-scaling
   spec:
     lookupPolicy:
       local: true
@@ -102,7 +102,7 @@ objects:
     - annotations: null
       from:
         kind: DockerImage
-        name: openshift-clean-slate:latest
+        name: openshift-cron-based-scaling:latest
       importPolicy: {}
       name: latest
       referencePolicy:
@@ -112,7 +112,7 @@ objects:
   kind: ImageStream
   metadata:
     labels:
-      build: openshift-clean-slate
+      build: openshift-cron-based-scaling
       job: ${JOB_NAME}
     name: rhel7-atomic
   spec:
