@@ -15,14 +15,11 @@ if [ -n "$TOKEN" ]; then
 fi
 
 # Iterate through DCs, and execute a rollout on them
-if [ -n "$DEPLOYMENT_CONFIGS" ]; then
-	for dc in $(echo $DEPLOYMENT_CONFIGS | sed "s/,/ /g")
-	do
-		echo "--"
-		echo "Wiping the slate of $dc"
-		oc rollout latest dc/$dc -n $PROJECT
-		echo "Done"
-	done
+if [ -n "$DEPLOYMENT_CONFIGS" ] -a [ -n "$REPLICA_COUNT"]; then
+	echo "--"
+	echo "Scaling Deployment Config $DEPLOYMENT_CONFIGS with the following replica: $REPLICA_COUNT"
+	oc rollout latest dc/$dc -n $PROJECT
+	echo "Done"	
 else
 	echo "No DeploymentConfigs specified. Skipping execution."
 fi
