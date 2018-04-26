@@ -18,7 +18,7 @@ fi
 if [ -n "$DEPLOYMENT_CONFIGS" ] -a [ -n "$REPLICA_COUNT"]; then
 	echo "--"
 	echo "Scaling Deployment Config $DEPLOYMENT_CONFIGS with the following replica: $REPLICA_COUNT"
-	oc rollout latest dc/$dc -n $PROJECT
+	oc scale --replicas=$REPLICA_COUNT dc $DEPLOYMENT_CONFIGS -n $PROJECT
 	echo "Done"	
 else
 	echo "No DeploymentConfigs specified. Skipping execution."
