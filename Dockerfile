@@ -14,4 +14,4 @@ RUN	chgrp -R 0 /opt/app/scripts/ ;\
 	find /opt/app/scripts/ -type d -exec chmod g+x {} + ;\
 	chmod +x /opt/app/scripts/*
 			
-CMD ["/opt/app/scripts/clean-slate.sh"]
+CMD ["/opt/app/scripts/scale.sh"]
