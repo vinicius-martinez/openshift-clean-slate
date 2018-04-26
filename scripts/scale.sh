@@ -1,5 +1,5 @@
 #!/bin/bash
-
+#
 if [ -f /run/secrets/kubernetes.io/serviceaccount/token ]; then
 	TOKEN=`cat /run/secrets/kubernetes.io/serviceaccount/token`
 	PROJECT=`cat /run/secrets/kubernetes.io/serviceaccount/namespace`
@@ -12,13 +12,14 @@ fi
 if [ -n "$TOKEN" ]; then
 	echo "Authenticating with token"
 	oc login $KUBERNETES_SERVICE_HOST:$KUBERNETES_SERVICE_PORT --token=$TOKEN --certificate-authority=$CA
+	oc whoami -t
 fi
 
 # Iterate through DCs, and execute a rollout on them
 if [ -n "$DEPLOYMENT_CONFIGS" -a  -n "$REPLICA_COUNT" ]; then
 	echo "--"
 	echo "Scaling Deployment Config $DEPLOYMENT_CONFIGS with the following replica: $REPLICA_COUNT"
-	oc scale --replicas=$REPLICA_COUNT dc $DEPLOYMENT_CONFIGS -n $PROJECT
+	oc scale dc $DEPLOYMENT_CONFIGS --replicas=$REPLICA_COUNT -n $PROJECT
 	echo "Done"	
 else
 	echo "No DeploymentConfigs specified. Skipping execution."
